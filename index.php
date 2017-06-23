@@ -69,20 +69,24 @@ $output = '
 
 foreach ($response['response']['data']['0']['projects'] as $key => $project) {
 
-	foreach ($project['topics'] as $key => $topic) {
+	if (isset($project['topics']) AND !empty($project['topics'])) {
+		foreach ($project['topics'] as $key => $topic) {
 
-		if (isset($topic['monitoredprofiles']) AND !empty($topic['monitoredprofiles'])) {
-			foreach ($topic['monitoredprofiles'] as $key => $monitored_profile) {
-				$output .= '<tr>';
-				$output .= '<td>' . $project['name'] . '</td>';
-				$output .= '<td>' . $project['id'] . '</td>';
-				$output .= '<td>' . $topic['name'] . '</td>';
-				$output .= '<td>' . $topic['id'] . '</td>';
-				$output .= '<td>' . $monitored_profile['type'] . '</td>';
-				$output .= (isset($monitored_profile['username'])) ? '<td>' . $monitored_profile['username'] . '</td>' : '<td></td>';
-				$output .= '<td>' . $monitored_profile['displayname'] . '</td>';
-				$output .= ($monitored_profile['type'] == 'keywordsearch') ? '<td>' . $topic['searchkeywords'] . '</td>' : '<td></td>';
-				$output .= '</tr>';
+			if (isset($topic['monitoredprofiles']) AND !empty($topic['monitoredprofiles'])) {
+				foreach ($topic['monitoredprofiles'] as $key => $monitored_profile) {
+
+					$output .= '<tr>';
+					$output .= '<td>' . $project['name'] . '</td>';
+					$output .= '<td>' . $project['id'] . '</td>';
+					$output .= '<td>' . $topic['name'] . '</td>';
+					$output .= '<td>' . $topic['id'] . '</td>';
+					$output .= '<td>' . $monitored_profile['type'] . '</td>';
+					$output .= (isset($monitored_profile['username'])) ? '<td>' . $monitored_profile['username'] . '</td>' : '<td></td>';
+					$output .= '<td>' . $monitored_profile['displayname'] . '</td>';
+					$output .= ($monitored_profile['type'] == 'keywordsearch') ? '<td>' . $topic['searchkeywords'] . '</td>' : '<td></td>';
+					$output .= '</tr>';
+
+				}
 			}
 
 		}
