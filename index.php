@@ -37,33 +37,33 @@ $engagor = new Engagor($accessToken);
 $request = $engagor->api(
 	'/me/accounts',
 	['limit' => 99999] // an arbitrarily high number to ensure all accounts will be returned
-	);
+);
 
 // Perform request and store to $response
 $response = $engagor->processResponse($request);
 
 // Check whether the response looks ok (i.e. is not empty, http response code is not 200)
 if (empty($response['meta']) OR $response['meta']['code'] != 200) {
-    die('<p>Something went wrong. Here is the API response:</p>' . print_r($response, true));
+	die('<p>Something went wrong. Here is the API response:</p>' . print_r($response, true));
 }
 
 // = OUTPUT PREPARATION =
 
 $output = '
 <table>
-	<thead>
-		<tr>
-			<th>Project Name</th>
-			<th>Project ID</th>
-			<th>Topic Name</th>
-			<th>Topic ID</th>
-			<th>Monitored Profile Type</th>
-			<th>Monitored Profile User Name</th>
-			<th>Monitored Profile Display Name</th>
-			<th>Search Keywords</th>
-		</tr>
-	</thead>
-	<tbody>
+<thead>
+<tr>
+<th>Project Name</th>
+<th>Project ID</th>
+<th>Topic Name</th>
+<th>Topic ID</th>
+<th>Monitored Profile Type</th>
+<th>Monitored Profile User Name</th>
+<th>Monitored Profile Display Name</th>
+<th>Search Keywords</th>
+</tr>
+</thead>
+<tbody>
 ';
 
 
@@ -71,19 +71,21 @@ foreach ($response['response']['data']['0']['projects'] as $key => $project) {
 
 	foreach ($project['topics'] as $key => $topic) {
 
-		foreach ($topic['monitoredprofiles'] as $key => $monitored_profile) {
-			$output .= '<tr>';
-			$output .= '<td>' . $project['name'] . '</td>';
-			$output .= '<td>' . $project['id'] . '</td>';
-			$output .= '<td>' . $topic['name'] . '</td>';
-			$output .= '<td>' . $topic['id'] . '</td>';
-			$output .= '<td>' . $monitored_profile['type'] . '</td>';
-			$output .= (isset($monitored_profile['username'])) ? '<td>' . $monitored_profile['username'] . '</td>' : '<td></td>';
-			$output .= '<td>' . $monitored_profile['displayname'] . '</td>';
-			$output .= ($monitored_profile['type'] == 'keywordsearch') ? '<td>' . $topic['searchkeywords'] . '</td>' : '<td></td>';
-			$output .= '</tr>';
-		}
+		if (isset($topic['monitoredprofiles']) AND !empty($topic['monitoredprofiles'])) {
+			foreach ($topic['monitoredprofiles'] as $key => $monitored_profile) {
+				$output .= '<tr>';
+				$output .= '<td>' . $project['name'] . '</td>';
+				$output .= '<td>' . $project['id'] . '</td>';
+				$output .= '<td>' . $topic['name'] . '</td>';
+				$output .= '<td>' . $topic['id'] . '</td>';
+				$output .= '<td>' . $monitored_profile['type'] . '</td>';
+				$output .= (isset($monitored_profile['username'])) ? '<td>' . $monitored_profile['username'] . '</td>' : '<td></td>';
+				$output .= '<td>' . $monitored_profile['displayname'] . '</td>';
+				$output .= ($monitored_profile['type'] == 'keywordsearch') ? '<td>' . $topic['searchkeywords'] . '</td>' : '<td></td>';
+				$output .= '</tr>';
+			}
 
+		}
 	}
 
 }
@@ -118,17 +120,17 @@ else {
 
 	<html lang='en'>
 	<head>
-		<meta charset='utf-8'>
+	<meta charset='utf-8'>
 
-		<title>EC Engagor Topics</title>
-		<meta name='description' content='EC Engagor Topics'>
-		<meta name='author' content='DG COMM A5'>
+	<title>EC Engagor Topics</title>
+	<meta name='description' content='EC Engagor Topics'>
+	<meta name='author' content='DG COMM A5'>
 
-		<link rel='stylesheet' href='css/styles.css?v=1.0'>
+	<link rel='stylesheet' href='css/styles.css?v=1.0'>
 
-		<!--[if lt IE 9]>
-		<script src='http://html5shiv.googlecode.com/svn/trunk/html5.js'></script>
-		<![endif]-->
+	<!--[if lt IE 9]>
+	<script src='http://html5shiv.googlecode.com/svn/trunk/html5.js'></script>
+	<![endif]-->
 	</head>
 	<body>
 	";
