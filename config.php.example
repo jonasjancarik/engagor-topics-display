@@ -1,5 +1,6 @@
 <?php
 
-// Hardcoded access token
+// Access credentials
+// See docs at https://developers.engagor.com/documentation/steps/
 $accountId = "1234";
 $accessToken = "1234ab1234cd";
